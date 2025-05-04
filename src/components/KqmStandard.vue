@@ -22,7 +22,7 @@
         <span>HP</span>
         <span class="main-stat">(1)</span>
       </div>
-      <input type="number" v-model="stats.hp">
+      <input type="number" v-model="substatRollsStore.rollCounts.hp">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.hp" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -33,7 +33,7 @@
         <span>HP%</span>
         <span class="main-stat" v-if="mainStats.hpPercent > 0">({{ mainStats.hpPercent }})</span>
       </div>
-      <input type="number" v-model="stats.hpPercent">
+      <input type="number" v-model="substatRollsStore.rollCounts.hpPercent">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.hpPercent" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -44,7 +44,7 @@
         <span>ATK</span>
         <span class="main-stat">(1)</span>
       </div>
-      <input type="number" v-model="stats.atk">
+      <input type="number" v-model="substatRollsStore.rollCounts.atk">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.atk" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -55,7 +55,7 @@
         <span>ATK%</span>
         <span class="main-stat" v-if="mainStats.atkPercent > 0">({{ mainStats.atkPercent }})</span>
       </div>
-      <input type="number" v-model="stats.atkPercent">
+      <input type="number" v-model="substatRollsStore.rollCounts.atkPercent">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.atkPercent" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -66,7 +66,7 @@
         <span>DEF</span>
         <span class="main-stat" v-if="mainStats.def > 0">({{ mainStats.def }})</span>
       </div>
-      <input type="number" v-model="stats.def">
+      <input type="number" v-model="substatRollsStore.rollCounts.def">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.def" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -77,7 +77,7 @@
         <span>DEF%</span>
         <span class="main-stat" v-if="mainStats.defPercent > 0">({{ mainStats.defPercent }})</span>
       </div>
-      <input type="number" v-model="stats.defPercent">
+      <input type="number" v-model="substatRollsStore.rollCounts.defPercent">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.defPercent" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -88,7 +88,7 @@
         <span>EM</span>
         <span class="main-stat" v-if="mainStats.em > 0">({{ mainStats.em }})</span>
       </div>
-      <input type="number" v-model="stats.em">
+      <input type="number" v-model="substatRollsStore.rollCounts.em">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.em" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -99,7 +99,7 @@
         <span>ER</span>
         <span class="main-stat" v-if="mainStats.er > 0">({{ mainStats.er }})</span>
       </div>
-      <input type="number" v-model="stats.er">
+      <input type="number" v-model="substatRollsStore.rollCounts.er">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.er" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -110,7 +110,7 @@
         <span>CR</span>
         <span class="main-stat" v-if="mainStats.cr > 0">({{ mainStats.cr }})</span>
       </div>
-      <input type="number" v-model="stats.cr">
+      <input type="number" v-model="substatRollsStore.rollCounts.cr">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.cr" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -121,7 +121,7 @@
         <span>CD</span>
         <span class="main-stat" v-if="mainStats.cd > 0">({{ mainStats.cd }})</span>
       </div>
-      <input type="number" v-model="stats.cd">
+      <input type="number" v-model="substatRollsStore.rollCounts.cd">
       <div class="external-bonus-container">
         <input type="number" v-model="externalBonus.cd" class="external-bonus-input" placeholder="Bonus">
       </div>
@@ -146,23 +146,16 @@
 </template>
 
 <script>
+import { useSubstatRollsStore } from '../stores/useSubstatRollsStore'
+
 export default {
   name: 'KqmStandard',
+  setup() {
+    const substatRollsStore = useSubstatRollsStore()
+    return { substatRollsStore }
+  },
   data() {
     return {
-      baseStats: {
-        hp: 253.94,
-        hpPercent: 4.96,
-        atk: 16.54,
-        atkPercent: 4.96,
-        def: 19.68,
-        defPercent: 6.2,
-        em: 19.82,
-        er: 5.51,
-        cr: 3.31,
-        cd: 6.62,
-        dmgPercent: 0
-      },
       mainStatMultipliers: {
         hp: 4780,
         hpPercent: 46.6,
@@ -175,19 +168,6 @@ export default {
         cr: 31.1,
         cd: 62.2,
         dmgPercent: 46.6
-      },
-      stats: {
-        hp: 0,
-        hpPercent: 0,
-        atk: 0,
-        atkPercent: 0,
-        def: 0,
-        defPercent: 0,
-        em: 0,
-        er: 0,
-        cr: 0,
-        cd: 0,
-        dmgPercent: 0
       },
       mainStats: {
         hp: 1,
@@ -239,7 +219,7 @@ export default {
   },
   computed: {
     totalInputs() {
-      return Object.values(this.stats).reduce((sum, value) => sum + Number(value), 0)
+      return Object.values(this.substatRollsStore.rollCounts).reduce((sum, value) => sum + Number(value), 0)
     },
     totalMainStats() {
       return Object.values(this.mainStats).reduce((sum, value) => sum + Number(value), 0)
@@ -264,23 +244,21 @@ export default {
     },
     finalStats() {
       return {
-        hp: (this.baseStats.hp * (this.stats.hp + 2) + this.mainStats.hp * this.mainStatMultipliers.hp + Number(this.externalBonus.hp)).toFixed(2),
-        hpPercent: (this.baseStats.hpPercent * (this.stats.hpPercent + 2) + this.mainStats.hpPercent * this.mainStatMultipliers.hpPercent + Number(this.externalBonus.hpPercent)).toFixed(2),
-        atk: (this.baseStats.atk * (this.stats.atk + 2) + this.mainStats.atk * this.mainStatMultipliers.atk + Number(this.externalBonus.atk)).toFixed(2),
-        atkPercent: (this.baseStats.atkPercent * (this.stats.atkPercent + 2) + this.mainStats.atkPercent * this.mainStatMultipliers.atkPercent + Number(this.externalBonus.atkPercent)).toFixed(2),
-        def: (this.baseStats.def * (this.stats.def + 2) + this.mainStats.def * this.mainStatMultipliers.def + Number(this.externalBonus.def)).toFixed(2),
-        defPercent: (this.baseStats.defPercent * (this.stats.defPercent + 2) + this.mainStats.defPercent * this.mainStatMultipliers.defPercent + Number(this.externalBonus.defPercent)).toFixed(2),
-        em: (this.baseStats.em * (this.stats.em + 2) + this.mainStats.em * this.mainStatMultipliers.em + Number(this.externalBonus.em)).toFixed(2),
-        er: (this.baseStats.er * (this.stats.er + 2) + this.mainStats.er * this.mainStatMultipliers.er + Number(this.externalBonus.er)).toFixed(2),
-        cr: (this.baseStats.cr * (this.stats.cr + 2) + this.mainStats.cr * this.mainStatMultipliers.cr + Number(this.externalBonus.cr)).toFixed(2),
-        cd: (this.baseStats.cd * (this.stats.cd + 2) + this.mainStats.cd * this.mainStatMultipliers.cd + Number(this.externalBonus.cd)).toFixed(2),
-        dmgPercent: (this.baseStats.dmgPercent * this.stats.dmgPercent + this.mainStats.dmgPercent * this.mainStatMultipliers.dmgPercent + Number(this.externalBonus.dmgPercent)).toFixed(2)
+        hp: (this.substatRollsStore.rollValues.hp * (this.substatRollsStore.rollCounts.hp + 2) + this.mainStats.hp * this.mainStatMultipliers.hp + Number(this.externalBonus.hp)).toFixed(2),
+        hpPercent: (this.substatRollsStore.rollValues.hpPercent * (this.substatRollsStore.rollCounts.hpPercent + 2) + this.mainStats.hpPercent * this.mainStatMultipliers.hpPercent + Number(this.externalBonus.hpPercent)).toFixed(2),
+        atk: (this.substatRollsStore.rollValues.atk * (this.substatRollsStore.rollCounts.atk + 2) + this.mainStats.atk * this.mainStatMultipliers.atk + Number(this.externalBonus.atk)).toFixed(2),
+        atkPercent: (this.substatRollsStore.rollValues.atkPercent * (this.substatRollsStore.rollCounts.atkPercent + 2) + this.mainStats.atkPercent * this.mainStatMultipliers.atkPercent + Number(this.externalBonus.atkPercent)).toFixed(2),
+        def: (this.substatRollsStore.rollValues.def * (this.substatRollsStore.rollCounts.def + 2) + this.mainStats.def * this.mainStatMultipliers.def + Number(this.externalBonus.def)).toFixed(2),
+        defPercent: (this.substatRollsStore.rollValues.defPercent * (this.substatRollsStore.rollCounts.defPercent + 2) + this.mainStats.defPercent * this.mainStatMultipliers.defPercent + Number(this.externalBonus.defPercent)).toFixed(2),
+        em: (this.substatRollsStore.rollValues.em * (this.substatRollsStore.rollCounts.em + 2) + this.mainStats.em * this.mainStatMultipliers.em + Number(this.externalBonus.em)).toFixed(2),
+        er: (this.substatRollsStore.rollValues.er * (this.substatRollsStore.rollCounts.er + 2) + this.mainStats.er * this.mainStatMultipliers.er + Number(this.externalBonus.er)).toFixed(2),
+        cr: (this.substatRollsStore.rollValues.cr * (this.substatRollsStore.rollCounts.cr + 2) + this.mainStats.cr * this.mainStatMultipliers.cr + Number(this.externalBonus.cr)).toFixed(2),
+        cd: (this.substatRollsStore.rollValues.cd * (this.substatRollsStore.rollCounts.cd + 2) + this.mainStats.cd * this.mainStatMultipliers.cd + Number(this.externalBonus.cd)).toFixed(2),
+        dmgPercent: (this.substatRollsStore.rollValues.dmgPercent * this.substatRollsStore.rollCounts.dmgPercent + this.mainStats.dmgPercent * this.mainStatMultipliers.dmgPercent + Number(this.externalBonus.dmgPercent)).toFixed(2)
       }
     },
     cdCrRatio() {
-      const cr = parseFloat(this.finalStats.cr)
-      const cd = parseFloat(this.finalStats.cd)
-      return cr > 0 ? cd / cr : 0
+      return this.finalStats.cd / this.finalStats.cr
     },
     isRatioIdeal() {
       return Math.abs(this.cdCrRatio - 2) < 0.1
