@@ -1,0 +1,46 @@
+# --- Team
+yaoyao char lvl=70/70 cons=6 talent=1,6,1;
+yaoyao add weapon="favoniuslance" refine=1 lvl=70/70;
+yaoyao add set="deepwoodmemories" count=4;
+yaoyao add stats def=100 hp=4666 hp%=0.39200000000000007 atk=355 atk%=0.308 er=0.23099999999999998 em=40 cr=0.399 cd=0.143 dendro%=0.348;
+
+wriothesley char lvl=80/90 cons=0 talent=10,8,1;
+wriothesley add weapon="flowingpurity" refine=5 lvl=90/90;
+wriothesley add set="marechausseehunter" count=4;
+wriothesley add stats def%=0.051 def=71 hp=6304 hp%=0.053 atk=258 atk%=0.97 er=0.227 em=21 cr=0.38800000000000007 cd=0.6689999999999999 cryo%=0.466;
+
+xingqiu char lvl=80/80 cons=6 talent=1,6,8;
+xingqiu add weapon="sacrificialsword" refine=5 lvl=90/90;
+xingqiu add set="emblemofseveredfate" count=4;
+// actual build
+xingqiu add stats def%=0.124 def=42 hp=4440 hp%=0.16299999999999998 atk=391 atk%=1.0370000000000001 er=0.21300000000000002 cr=0.23299999999999998 cd=0.856;
+
+kuki char lvl=90/90 cons=0 talent=1,1,1;
+kuki add weapon="ironsting" refine=1 lvl=90/90;
+kuki add set="gildeddreams" count=4;
+kuki add stats def=83 hp=5252 hp%=0.135 atk=236 atk%=0.328 er=0.382 em=639.5 cr=0.035 cd=0.396;
+
+# --- Options
+options swap_delay=12 iteration=1000;
+energy every interval=480,720 amount=1;
+
+# --- Targets
+target lvl=100 resist=0.1 radius=2 pos=0,2.4 hp=999999999; 
+
+# --- Rotation
+active xingqiu;
+for let i=0; i<4; i=i+1 {
+  xingqiu skill, burst, attack;
+  if .xingqiu.skill.ready {
+    xingqiu skill, attack;
+  }
+  yaoyao skill, attack;
+  kuki skill;
+  wrio skill,
+       attack:5,charge,
+       attack:5,charge,
+       attack:5,charge,
+       attack:5,charge,
+       attack:4;
+  print("Rotation Done");
+}

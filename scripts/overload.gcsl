@@ -1,0 +1,57 @@
+mavuika char lvl=80/80 cons=0 talent=1,8,8;
+mavuika add weapon="serpentspine" refine=1 lvl=90/90;
+mavuika add set="scrolloftheheroofcindercity" count=4;
+mavuika add stats def%=0.241 def=19 hp=5587 hp%=0.245 atk=377 atk%=0.664 em=42 cr=0.33099999999999996 cd=1.128 pyro%=0.466;
+
+clorinde char lvl=80/90 cons=0 talent=1,10,8;
+clorinde add weapon="finaleofthedeep" refine=5 lvl=90/90;
+clorinde add set="fragmentofharmonicwhimsy" count=4;
+clorinde add stats def=97 hp=6095 atk=325 atk%=0.711 er=0.065 em=109 cr=0.233 cd=1.322 electro%=0.466;
+
+fischl char lvl=80/80 cons=3 talent=1,5,1;
+fischl add weapon="skywardharp" refine=1 lvl=90/90;
+fischl add set="fragmentofharmonicwhimsy" count=2;
+fischl add set="unfinishedreverie" count=2;
+fischl add stats def=58 hp=5766 atk=428 atk%=1.182 er=0.11 em=65 cr=0.629 cd=0.498;
+
+chevreuse char lvl=80/80 cons=6 talent=1,8,8;
+chevreuse add weapon="blacktassel" refine=1 lvl=90/90;
+chevreuse add set="gladiatorsfinale" count=2;
+chevreuse add stats def%=0.087 def=81 hp=4707 hp%=1.328 atk=152 atk%=0.333 er=0.292 em=42 cr=0.154 cd=0.078;
+
+# --- Options
+
+options swap_delay=12 iteration=1000;
+energy every interval=480,720 amount=1;
+
+# --- Targets
+
+target lvl=100 resist=0.1 radius=2 pos=0,2.4 hp=999999999; 
+
+# --- Rotation
+fn clorinde_combo() {
+  clorinde skill;
+  while .clorinde.status.clorinde-night-watch {
+    if .clorinde.bolratio >= 1 {
+      clorinde skill;
+    } else {
+      clorinde attack;
+    }
+  }
+}
+
+active fischl;
+
+#opener
+if(.fischl.burst.ready) {
+  fischl burst;
+} else {
+  fischl skill;
+}
+mav skill;
+chevreuse burst, skill[hold=1], skill[hold=1], skill[hold=1];
+mav burst;
+if(.clorinde.burst.ready) {
+  clorinde burst;
+}
+clorinde_combo();
