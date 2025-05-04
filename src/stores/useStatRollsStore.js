@@ -70,6 +70,9 @@ export const useStatRollsStore = defineStore('statRolls', {
     totalRolls: (state) => {
       return Object.values(state.rollCounts).reduce((sum, value) => sum + Number(value), 0)
     },
+    substatRollsCount: (state) => {
+      return Object.values(state.rollCounts).reduce((sum, value) => sum + Number(value), 0)
+    },
     totalMainStats: (state) => {
       return Object.values(state.activeMainStats).reduce((sum, value) => sum + Number(value), 0)
     },
